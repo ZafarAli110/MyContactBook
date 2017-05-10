@@ -168,7 +168,7 @@ namespace MyContactBook.Controllers
                                                    join tblCountry in dbContext.Countries on tblContacts.CountryId equals tblCountry.CountryId
                                                    join tblStates in dbContext.States on tblContacts.StateId equals tblStates.StateId
                                                    where tblContacts.ContactId.Equals(contactId)
-                                                   select new 
+                                                   select new
                                                    {
                                                        tblContacts,
                                                        tblCountry.CountryName,
@@ -197,7 +197,7 @@ namespace MyContactBook.Controllers
             {
                 return HttpNotFound("Contact Not Found");
             }
-            
+
             //fetching States and Countries for dropdownlist
             var allCounteries = new List<Country>();
             var allStates = new List<State>();
@@ -207,13 +207,13 @@ namespace MyContactBook.Controllers
                 allStates = dbContext.States.Where(s => s.CountryId.Equals(contact.CountryId)).OrderBy(s => s.StateName).ToList();
             }
             ViewBag.Countries = new SelectList(allCounteries, "CountryId", "CountryName", contact.CountryId);
-            ViewBag.States = new SelectList(allStates , "StateId" , "StateName" , contact.StateId);
-            
+            ViewBag.States = new SelectList(allStates, "StateId", "StateName", contact.StateId);
+
             return View(contact);
         }
 
         [HttpPost]
-        public ActionResult Edit(Contact contact , HttpPostedFileBase file)
+        public ActionResult Edit(Contact contact, HttpPostedFileBase file)
         {
             #region//fetching States and Countries for dropdownlist
             var allCounteries = new List<Country>();
@@ -225,7 +225,7 @@ namespace MyContactBook.Controllers
                 {
                     allStates = dbContext.States.Where(s => s.CountryId.Equals(contact.CountryId)).OrderBy(s => s.StateName).ToList();
                 }
-                
+
             }
             ViewBag.Countries = new SelectList(allCounteries, "CountryId", "CountryName", contact.CountryId);
             ViewBag.States = new SelectList(allStates, "StateId", "StateName", contact.StateId);
@@ -237,10 +237,10 @@ namespace MyContactBook.Controllers
             {
                 if (file.ContentLength > (512 * 1000)) //if file size > 512KB
                 {
-                    ModelState.AddModelError("FileErrorMessage","File size must be within a range of 512KB");
+                    ModelState.AddModelError("FileErrorMessage", "File size must be within a range of 512KB");
                 }
 
-                string[] allowedFileType = new string[] { "image/png" , "image/jpeg" , "image/jpg" , "image/gif" };
+                string[] allowedFileType = new string[] { "image/png", "image/jpeg", "image/jpg", "image/gif" };
                 bool isFileTypeValid = false;
 
                 foreach (var item in allowedFileType)
@@ -254,7 +254,7 @@ namespace MyContactBook.Controllers
 
                 if (isFileTypeValid == false)
                 {
-                    ModelState.AddModelError("FileErrorMessage","Only .png, .gif, .jpg , .jpeg Types are allow");
+                    ModelState.AddModelError("FileErrorMessage", "Only .png, .gif, .jpg , .jpeg Types are allow");
                 }
             }
             #endregion
@@ -262,19 +262,19 @@ namespace MyContactBook.Controllers
             #region //Validate Model and Save changes into the database
             if (ModelState.IsValid)
             {
-                    if (file != null)
-                    {
-                        string targetPath = Server.MapPath("~/Content/Images");
-                        string fileName = Path.GetFileName(file.FileName);
-                        file.SaveAs(Path.Combine(targetPath, fileName));
-                        contact.ImagePath = fileName;
-                    }
+                if (file != null)
+                {
+                    string targetPath = Server.MapPath("~/Content/Images");
+                    string fileName = Path.GetFileName(file.FileName);
+                    file.SaveAs(Path.Combine(targetPath, fileName));
+                    contact.ImagePath = fileName;
+                }
 
                 using (var dbContext = new ContactDbContext())
                 {
                     var selectedContactFromDataBase = dbContext.Contacts.Where(c => c.ContactId.Equals(contact.ContactId)).FirstOrDefault();
 
-                    if (selectedContactFromDataBase !=null)
+                    if (selectedContactFromDataBase != null)
                     {
                         selectedContactFromDataBase.ContactFName = contact.ContactFName;
                         selectedContactFromDataBase.ContactLName = contact.ContactLName;
@@ -283,23 +283,23 @@ namespace MyContactBook.Controllers
                         selectedContactFromDataBase.ContactNumber2 = contact.ContactNumber2;
                         selectedContactFromDataBase.CountryId = contact.CountryId;
                         selectedContactFromDataBase.StateId = contact.StateId;
-                        if (file !=null)
+                        if (file != null)
                         {
                             selectedContactFromDataBase.ImagePath = contact.ImagePath;
                         }
-                       
+
                     }
 
                     dbContext.SaveChanges();
                 }
 
-                return RedirectToAction("Index" , "Home");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
                 return View(contact);
             }
-#endregion
+            #endregion
         }
 
         [HttpGet]
@@ -317,80 +317,103 @@ namespace MyContactBook.Controllers
             }
         }
 
-
-
-        public ActionResult WebGridDemo()
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int id)
         {
-            var contactList = new List<ContactModel>();
             using (var dbContext = new ContactDbContext())
             {
-                var query = (from tblContact in dbContext.Contacts
-                             join tblCountry in dbContext.Countries on tblContact.CountryId equals tblCountry.CountryId
-                             join tblState in dbContext.States on tblContact.StateId equals tblState.StateId
-                             select new ContactModel
-                             {
-                                 ContactId = tblContact.ContactId,
-                                 FirstName = tblContact.ContactFName,
-                                 LastName = tblContact.ContactLName,
-                                 EmailAddress = tblContact.EmailAddress,
-                                 Contact1 = tblContact.ContactNumber1,
-                                 Contact2 = tblContact.ContactNumber2,
-                                 Country = tblCountry.CountryName,
-                                 State = tblState.StateName,
-                                 ImagePath = tblContact.ImagePath
-                             }).ToList();
-                contactList = query.ToList();
+                var contact = dbContext.Contacts.Where(c => c.CountryId == id).FirstOrDefault();
+
+                if (contact != null)
+                {
+                    dbContext.Contacts.Remove(contact);
+                    dbContext.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+
+                else
+                {
+                    return HttpNotFound("Contact Not Found");
+                }
             }
 
-            return View(contactList);
         }
 
-        public ActionResult JqueryDemo()
+    
+    public ActionResult WebGridDemo()
+    {
+        var contactList = new List<ContactModel>();
+        using (var dbContext = new ContactDbContext())
         {
-            return View();
+            var query = (from tblContact in dbContext.Contacts
+                         join tblCountry in dbContext.Countries on tblContact.CountryId equals tblCountry.CountryId
+                         join tblState in dbContext.States on tblContact.StateId equals tblState.StateId
+                         select new ContactModel
+                         {
+                             ContactId = tblContact.ContactId,
+                             FirstName = tblContact.ContactFName,
+                             LastName = tblContact.ContactLName,
+                             EmailAddress = tblContact.EmailAddress,
+                             Contact1 = tblContact.ContactNumber1,
+                             Contact2 = tblContact.ContactNumber2,
+                             Country = tblCountry.CountryName,
+                             State = tblState.StateName,
+                             ImagePath = tblContact.ImagePath
+                         }).ToList();
+            contactList = query.ToList();
         }
 
-        
-        #region Old logic code which has now no use  
-        //private void GeneratingSelectListItemOfCountriesAndStates()
-        //{
-        //    var dbContext = new ContactDbContext();
-        //    var countriesList = dbContext.Countries.OrderBy(c => c.CountryName).ToList();
-        //    var statesList = dbContext.States.OrderBy(s => s.StateName).ToList();
-
-        //    #region Old Logic
-        //    //List<SelectListItem> countriesSelectList = new List<SelectListItem>();
-        //    //List<SelectListItem> statesSelectList = new List<SelectListItem>();
-        //    //if (countriesList.Count > 0 && statesList.Count > 0)
-        //    //{
-        //    //    foreach (var country in countriesList)
-        //    //    {
-        //    //        SelectListItem s1 = new SelectListItem();
-
-        //    //        s1.Value = country.CountryId.ToString();
-        //    //        s1.Text = country.CountryName;
-
-        //    //        countriesSelectList.Add(s1);
-        //    //    }
-        //    //    foreach (var state in statesList)
-        //    //    {
-        //    //        SelectListItem s1 = new SelectListItem();
-
-        //    //        s1.Value = state.StateId.ToString();
-        //    //        s1.Text = state.StateName;
-
-        //    //        statesSelectList.Add(s1);
-        //    //    }
-        //    //    ViewData["Countries"] = countriesSelectList;
-        //    //    ViewData["States"] = statesSelectList;
-        //    //}
-        //    #endregion
-
-        //    ViewData["Countries"] = new SelectList(countriesList, "CountryId", "CountryName");
-        //    ViewData["States"] = new SelectList(statesList, "StateId", "StateName");
-        //}
-        #endregion
-
-
+        return View(contactList);
     }
+
+    public ActionResult JqueryDemo()
+    {
+        return View();
+    }
+
+
+    #region Old logic code which has now no use  
+    //private void GeneratingSelectListItemOfCountriesAndStates()
+    //{
+    //    var dbContext = new ContactDbContext();
+    //    var countriesList = dbContext.Countries.OrderBy(c => c.CountryName).ToList();
+    //    var statesList = dbContext.States.OrderBy(s => s.StateName).ToList();
+
+    //    #region Old Logic
+    //    //List<SelectListItem> countriesSelectList = new List<SelectListItem>();
+    //    //List<SelectListItem> statesSelectList = new List<SelectListItem>();
+    //    //if (countriesList.Count > 0 && statesList.Count > 0)
+    //    //{
+    //    //    foreach (var country in countriesList)
+    //    //    {
+    //    //        SelectListItem s1 = new SelectListItem();
+
+    //    //        s1.Value = country.CountryId.ToString();
+    //    //        s1.Text = country.CountryName;
+
+    //    //        countriesSelectList.Add(s1);
+    //    //    }
+    //    //    foreach (var state in statesList)
+    //    //    {
+    //    //        SelectListItem s1 = new SelectListItem();
+
+    //    //        s1.Value = state.StateId.ToString();
+    //    //        s1.Text = state.StateName;
+
+    //    //        statesSelectList.Add(s1);
+    //    //    }
+    //    //    ViewData["Countries"] = countriesSelectList;
+    //    //    ViewData["States"] = statesSelectList;
+    //    //}
+    //    #endregion
+
+    //    ViewData["Countries"] = new SelectList(countriesList, "CountryId", "CountryName");
+    //    ViewData["States"] = new SelectList(statesList, "StateId", "StateName");
+    //}
+    #endregion
+
+
+}
 }

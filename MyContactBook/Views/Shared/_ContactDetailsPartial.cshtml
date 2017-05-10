@@ -47,14 +47,11 @@
         </div>
 
         <div class="col-sm-6" style="display:@(string.IsNullOrEmpty(Model.ImagePath)? "none" : "block")">
-            &nbsp;
-            <img src="~/Content/Images/@Model.ImagePath" alt="No Image Found" style="width:100% ; max-width:300px" />
+            
+            <img src="~/Content/Images/@Model.ImagePath" alt="No Image Found" style="width:100% ; max-width:300px; margin: 2% 0 2% 0" />
         </div>
 
     </div>
 </div>
-<p>
 
-    @Html.ActionLink("Back to List", "Index")
-</p>
 

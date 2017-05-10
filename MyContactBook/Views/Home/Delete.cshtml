@@ -15,9 +15,9 @@
     
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
+        @Html.HiddenFor(model => model.ContactId)
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Delete" class="btn btn-danger" style="margin-left:2%" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }
