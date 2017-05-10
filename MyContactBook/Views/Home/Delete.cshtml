@@ -11,7 +11,7 @@
     <h4>Contact</h4>
     <hr />
     @* here we use the partial view *@
-    @Html.Partial("")
+    @Html.Partial("_ContactDetailsPartial",Model)
     
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
