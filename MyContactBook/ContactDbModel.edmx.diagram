@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3b63204ccc4448cfb69e7df000980b04" Name="Diagram1">
+        <EntityTypeShape EntityType="ContactBookDbModel.Contact" Width="1.5" PointX="0.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContactBookDbModel.Country" Width="1.5" PointX="2.5" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContactBookDbModel.State" Width="1.5" PointX="4.875" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="ContactBookDbModel.FK_Contact_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="ContactBookDbModel.FK_Contact_State_" ManuallyRouted="false" />
+        <AssociationConnector Association="ContactBookDbModel.FK_State_Country_" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

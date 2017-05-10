@@ -1,0 +1,27 @@
+﻿@model IEnumerable<MyContactBook.ViewModel.ContactModel>
+
+@{
+    ViewBag.Title = "WebGridDemo";
+    var grid = new WebGrid(source: Model , canPage: true, canSort: true, rowsPerPage: 10);
+}
+
+<h2>WebGrid Demo</h2>
+@grid.GetHtml(
+    tableStyle: "table table-responsive",
+   columns: grid.Columns(
+
+                    grid.Column("FirstName ", "First Name"),
+                    grid.Column("LastName ", "Last Name"),
+                    grid.Column("Contact1 ", "Contact Number1"),
+                    grid.Column("Contact2 ", "Contact Number2"),
+                    grid.Column("EmailAddress ", "Email"),
+                    grid.Column(header: "Image", format: @<text>@Html.Raw((item.ImagePath == null ? "" : "<img width='100' src='/Content/Images/'" + item.ImagePath + "'"))</text>),
+                    grid.Column(header: "View", format: (item) => Html.ActionLink("View", "View", "Home", new { id = item.ContactId }, null))
+
+
+                    )
+       )
+
+
+
+

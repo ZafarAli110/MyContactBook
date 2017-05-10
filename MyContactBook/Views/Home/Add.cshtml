@@ -1,0 +1,144 @@
+﻿@model MyContactBook.Contact
+
+@{
+    ViewBag.Title = "Add";
+
+}
+
+<h2>Add</h2>
+
+@using (Html.BeginForm("Add","Home",FormMethod.Post,new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactFName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactFName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter First Name" } })
+                @Html.ValidationMessageFor(model => model.ContactFName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactLName, htmlAttributes : new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactLName, new { htmlAttributes = new { @class = "form-control" , placeholder = "Enter Last Name" } })
+                @Html.ValidationMessageFor(model => model.ContactLName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control" , placeholder = "Enter Email" } })
+                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactNumber1, htmlAttributes: new { @class = "control-label col-md-2"  })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactNumber1, new { htmlAttributes = new { @class = "form-control" , placeholder = "Enter Contact Number 1" } })
+                @Html.ValidationMessageFor(model => model.ContactNumber1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactNumber2, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactNumber2, new { htmlAttributes = new { @class = "form-control" , placeholder = "Enter Contact Number 2" } })
+                @Html.ValidationMessageFor(model => model.ContactNumber2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CountryId, "Country", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CountryId", (IEnumerable<SelectListItem>)ViewData["Countries"], "Select Country", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StateId, "State", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("StateId", (IEnumerable<SelectListItem>)ViewData["States"], "Select State", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Select Image:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("file", null, new { type = "file", @class = "form-control", accept = "image/jpg, image/x-png , image/gif" })
+                @Html.ValidationMessage("FileErrorMessage")
+            
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        // here we will fetch the states for the selected country
+        $(function () {   //$(document).ready(function () { });
+
+            $("#CountryId").change(function () {
+                var countryID = parseInt($(this).val());
+
+                if (!isNaN(countryID)) {
+
+                    var $ddStates = $("#StateId");  // grabbing the dropdownList of states 
+                    $ddStates.empty();   //clear all items from the dropdownList
+                    $ddStates.append($("<option></option>").val('').html("Please wait...")); //adding empty('') value and the header text in the dropdownList of states
+
+                    //Making jquery Ajax call
+                    $.ajax({
+
+                        url: '@Url.Action("GetStates", "Home")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { countryID: countryID },
+
+                        success: function (d) {
+
+                            $ddStates.empty(); //clear all items including the Please wait text
+                            $ddStates.append($("<option></option>").val('').html("Select State")); //now again adding the header,this time with different html text
+
+                            $.each(d, function (index, item) {
+                                $ddStates.append($("<option></option>").val(item.StateId).html(item.StateName));
+                            });
+                        },
+
+                        error: function () {
+                            alert("An error has been occured while gathering the data.please try again");
+                        }
+                    });
+
+                }
+
+
+            });
+
+
+        });
+
+    </script>
+}

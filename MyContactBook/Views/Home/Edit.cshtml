@@ -1,0 +1,153 @@
+﻿@model MyContactBook.Contact
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Contact</h2>
+
+
+@using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ContactId)
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactFName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactFName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactFName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactLName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactLName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactLName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactNumber1, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactNumber1, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactNumber1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactNumber2, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactNumber2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactNumber2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CountryId, "Country", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CountryId", (IEnumerable<SelectListItem>)ViewBag.Countries, "Select Country", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StateId, "State", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("StateId", (IEnumerable<SelectListItem>)ViewBag.States, "Select State", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @Html.Label("Select Image : ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5" style="width:auto">
+
+                @Html.TextBox("file", null, new { type = "file", @class = "form-control", accept = "image/x-png,image/jpg,image/gif" })
+                @Html.ValidationMessage("FileErrorMessage", new { @class = "text-danger" })
+            </div>
+            @*show image if exists*@
+            <div class="col-md-5" style="display:@(string.IsNullOrEmpty(Model.ImagePath)? "none" : "block")">
+
+                <img src="~/Content/Images/@Model.ImagePath" alt="No Image Found" width="100" style="margin-top:5px" />
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        $(function () {
+
+            $("#CountryId").change(function () {
+
+                var countryID = parseInt($(this).val());
+
+                if (!isNaN(countryID)) {
+
+                    var $ddState = $("#StateId"); // grabbing the dropdownList of states 
+
+                    $ddState.empty(); //clear all items
+                    $ddState.append($("<option></option>").val('').html("Please wait...")); //adding empty('') value and the header text in the dropdownList of states
+
+                    $.ajax({
+
+                        url: '@Url.Action("GetStates","Home")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { countryID: countryID },
+
+                        success: function (d) {
+
+                            $ddState.empty();
+                            $ddState.append($("<option></option>").val('').html("Select State"));
+
+                            $.each( d , function (index, item) {
+
+                                $ddState.append($("<option></option>").val(item.StateId).html(item.StateName));
+                            });
+                        },
+
+                        error: function () {
+                            alert("An error has been occured while gathering the data.please try again");
+                        }
+
+                        });
+                }
+
+            }); //end of change function
+
+        }); //end of dom ready function 
+
+    </script>
+}

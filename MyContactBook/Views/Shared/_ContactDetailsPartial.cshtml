@@ -1,0 +1,60 @@
+﻿@model MyContactBook.Contact
+
+
+
+<div class="container">
+    <div class="row">
+        
+        <div class="col-sm-6">
+
+            <table class="table table-striped table-responsive">
+
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.ContactFName) </td>
+                    <td>@Html.DisplayFor(model => model.ContactFName)</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.ContactLName) </td>
+                    <td>@Html.DisplayFor(model => model.ContactLName)</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.EmailAddress) </td>
+                    <td>@Html.DisplayFor(model => model.EmailAddress)</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.ContactNumber1) </td>
+                    <td>@Html.DisplayFor(model => model.ContactNumber1)</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.ContactNumber2) </td>
+                    <td>@Html.DisplayFor(model => model.ContactNumber2)</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CountryName) </td>
+                    <td>@Html.DisplayFor(model => model.CountryName)</td>
+                </tr>
+
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.StateName) </td>
+                    <td>@Html.DisplayFor(model => model.StateName)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-sm-6" style="display:@(string.IsNullOrEmpty(Model.ImagePath)? "none" : "block")">
+            &nbsp;
+            <img src="~/Content/Images/@Model.ImagePath" alt="No Image Found" style="width:100% ; max-width:300px" />
+        </div>
+
+    </div>
+</div>
+<p>
+
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
