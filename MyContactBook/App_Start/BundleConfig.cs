@@ -25,6 +25,7 @@ namespace MyContactBook
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/theme.bootstrap.min.css",
                       "~/Content/site.css"));
         }
     }

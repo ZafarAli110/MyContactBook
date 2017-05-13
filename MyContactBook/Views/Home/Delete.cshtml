@@ -4,11 +4,9 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this contact?</h3>
 <div>
-    <h4>Contact</h4>
+    
     <hr />
     @* here we use the partial view *@
     @Html.Partial("_ContactDetailsPartial",Model)
@@ -18,7 +16,7 @@
         @Html.HiddenFor(model => model.ContactId)
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-danger" style="margin-left:2%" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List","Index")
         </div>
     }
 </div>

@@ -324,7 +324,7 @@ namespace MyContactBook.Controllers
         {
             using (var dbContext = new ContactDbContext())
             {
-                var contact = dbContext.Contacts.Where(c => c.CountryId == id).FirstOrDefault();
+                var contact = dbContext.Contacts.Where(c => c.ContactId == id).FirstOrDefault();
 
                 if (contact != null)
                 {

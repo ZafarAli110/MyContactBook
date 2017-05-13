@@ -4,74 +4,76 @@
     ViewBag.Title = "Contact Book";
 }
 
-<h2>Index</h2>
+<h2>All Contacts</h2>
+<br />
+<div class="row container-fluid" >
+    
+    <div class="col-md-12 col-sm-12 col-xs-12">
 
-<p>
-    @Html.ActionLink("Create New", "Add", "Home")
-</p>
-<div class="row">
-    <div class="col-md-12">
-
-
-        <table class="table table-striped table-responsive ">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </th>
-
-
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
+        <div class="table-responsive" style="overflow-y:auto;">
+            
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th>
 
 
-                <th>
-                    @Html.DisplayNameFor(model => model.EmailAddress)
-                </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </th>
 
-                <th>
-                    @Html.DisplayNameFor(model => model.Country)
-                </th>
 
-                <th>
-                    @Html.DisplayNameFor(model => model.State)
-                </th>
-                <th>Image</th>
-                <th>Action</th>
-            </tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.EmailAddress)
+                        </th>
 
-            @foreach (var item in Model)
+                        <th>
+                            @Html.DisplayNameFor(model => model.Country)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.State)
+                        </th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FirstName)
-                    </td>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
 
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmailAddress)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Country)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.State)
-                    </td>
-                    <td>
-                        <img width="100" alt="" src="~/Content/Images/@item.ImagePath" />
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.ContactId }) |
-                        @Html.ActionLink("Details", "View", new { id = item.ContactId }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ContactId })
-                    </td>
-                </tr>
-            }
-
-        </table>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmailAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.State)
+                            </td>
+                            <td>
+                                <img  alt="No image Found" src="~/Content/Images/@item.ImagePath" class="img-responsive" width="100" height="60"/>
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.ContactId }) |
+                                @Html.ActionLink("Details", "View", new { id = item.ContactId }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.ContactId })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
