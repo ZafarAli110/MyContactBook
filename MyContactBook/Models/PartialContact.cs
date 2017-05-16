@@ -7,7 +7,10 @@ namespace MyContactBook
     public partial class Contact
     {
         public HttpPostedFileBase File { get; set; }
+
         public string CountryName { get; set; }
+
         public string StateName { get; set; }
+
     }
 }

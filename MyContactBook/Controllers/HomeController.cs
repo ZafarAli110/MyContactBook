@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace MyContactBook.Controllers
 {
     public class HomeController : Controller
     {
-
-
         public ActionResult Index()
+        {
+            var contactList = ListOfContactModel();
+
+            return View(contactList);
+
+        }
+
+        private List<ContactModel> ListOfContactModel()
         {
             var contactList = new List<ContactModel>();
             using (var dbContext = new ContactDbContext())
             {
-                var query = (from tblContact in dbContext.Contacts
+                var contactsFromDb = (from tblContact in dbContext.Contacts
                              join tblCountry in dbContext.Countries on tblContact.CountryId equals tblCountry.CountryId
                              join tblState in dbContext.States on tblContact.StateId equals tblState.StateId
                              select new ContactModel
@@ -32,11 +39,11 @@ namespace MyContactBook.Controllers
                                  ImagePath = tblContact.ImagePath
                              }).ToList();
 
-                contactList = query;
+                contactList = contactsFromDb;
 
-                return View(contactList);
+                return contactList;
+                
             }
-
         }
 
         [HttpGet]
@@ -341,37 +348,56 @@ namespace MyContactBook.Controllers
 
         }
 
-    
-    public ActionResult WebGridDemo()
-    {
-        var contactList = new List<ContactModel>();
-        using (var dbContext = new ContactDbContext())
+
+        [HttpGet]
+        public ActionResult Export()
         {
-            var query = (from tblContact in dbContext.Contacts
-                         join tblCountry in dbContext.Countries on tblContact.CountryId equals tblCountry.CountryId
-                         join tblState in dbContext.States on tblContact.StateId equals tblState.StateId
-                         select new ContactModel
-                         {
-                             ContactId = tblContact.ContactId,
-                             FirstName = tblContact.ContactFName,
-                             LastName = tblContact.ContactLName,
-                             EmailAddress = tblContact.EmailAddress,
-                             Contact1 = tblContact.ContactNumber1,
-                             Contact2 = tblContact.ContactNumber2,
-                             Country = tblCountry.CountryName,
-                             State = tblState.StateName,
-                             ImagePath = tblContact.ImagePath
-                         }).ToList();
-            contactList = query.ToList();
+            var contactList = ListOfContactModel();
+            return View(contactList);
         }
+
+        [HttpPost]
+        [ActionName("Export")]
+        public FileResult ExportData()
+        {
+            var contactList = ListOfContactModel();
+            var grid = new WebGrid(source: contactList , canPage:false , canSort:false);
+            string dataToBeExport = @grid.GetHtml(
+                                        columns: grid.Columns(
+                                        grid.Column("FirstName", header: "First Name"),
+                                        grid.Column("LastName", header: "Last Name"),
+                                        grid.Column("EmailAddress", header: "Email Id"),
+                                        grid.Column("Contact1", header: "Contact No.1"),
+                                        grid.Column("Contact2", header: "Contact No.2"),
+                                        grid.Column("Country", header: "Country"),
+                                        grid.Column("State", header: "State")
+                                            )
+                                        ).ToHtmlString();
+
+            return File(new System.Text.UTF8Encoding().GetBytes(dataToBeExport),
+                        "application/vnd.ms-excel","Contacts.xls");
+        }
+        
+        //Grid.Mvc
+        public ActionResult WebGridDemo()
+    {
+            var contactList = ListOfContactModel();
 
         return View(contactList);
     }
 
-    public ActionResult JqueryDemo()
-    {
+        //WebGrid
+        public ActionResult WebGridDemo2()
+        {
+            var contactList = ListOfContactModel();
+
+            return View(contactList);
+        }
+
+        public ActionResult JqueryDemo()
+        {
         return View();
-    }
+        }
 
 
     #region Old logic code which has now no use  

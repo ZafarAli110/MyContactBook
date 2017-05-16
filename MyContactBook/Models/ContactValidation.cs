@@ -26,6 +26,12 @@ namespace MyContactBook
         [Display(Name = "Contact Number2")]
         public Nullable<int> ContactNumber2 { get; set; }
 
+        [Display(Name ="Country")]
+        public int CountryId { get; set; }
+
+        [Display(Name = "State")]
+        public int StateId { get; set; }
+
     }
 
     

@@ -45,12 +45,11 @@
                 </tr>
             </table>
         </div>
-
+        
         <div class="col-sm-6" style="display:@(string.IsNullOrEmpty(Model.ImagePath)? "none" : "block")">
-            
-            <img src="~/Content/Images/@Model.ImagePath" alt="No Image Found" style="width:100% ; max-width:300px; margin: 2% 0 2% 0" />
-        </div>
 
+            <img src="~/Content/Images/@Model.ImagePath" alt="No Image Found" style="width:100% ; max-width:200px; height :200px; margin: 2% 0 2% 0" class="img-thumbnail" />
+        </div>
     </div>
 </div>
 

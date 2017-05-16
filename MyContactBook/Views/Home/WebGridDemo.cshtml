@@ -1,27 +1,40 @@
-﻿@model IEnumerable<MyContactBook.ViewModel.ContactModel>
+﻿@using MyContactBook.CustomHtmlHelpers
+@model IEnumerable<MyContactBook.ViewModel.ContactModel>
+@using GridMvc.Html
 
 @{
-    ViewBag.Title = "WebGridDemo";
-    var grid = new WebGrid(source: Model , canPage: true, canSort: true, rowsPerPage: 10);
+    ViewBag.Title = "GridMVCDemo";
 }
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.min.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<h2>GridMVCDemo</h2>
 
-<h2>WebGrid Demo</h2>
-@grid.GetHtml(
-    tableStyle: "table table-responsive",
-   columns: grid.Columns(
+<div class="row">
+    <div class="col-sm-12 col-xs-12 col-md-12">
 
-                    grid.Column("FirstName ", "First Name"),
-                    grid.Column("LastName ", "Last Name"),
-                    grid.Column("Contact1 ", "Contact Number1"),
-                    grid.Column("Contact2 ", "Contact Number2"),
-                    grid.Column("EmailAddress ", "Email"),
-                    grid.Column(header: "Image", format: @<text>@Html.Raw((item.ImagePath == null ? "" : "<img width='100' src='/Content/Images/'" + item.ImagePath + "'"))</text>),
-                    grid.Column(header: "View", format: (item) => Html.ActionLink("View", "View", "Home", new { id = item.ContactId }, null))
+        @Html.Grid(Model).Columns(columns =>
+   {
 
+       columns.Add(model => model.FirstName).Titled("First Name").Filterable(true);
+       columns.Add(model => model.LastName).Titled("Last Name").Filterable(true);
+       columns.Add(model => model.EmailAddress).Titled("Email Id").Filterable(true);
+       columns.Add(model => model.Contact1).Titled("Contact No.1").Filterable(true);
+       columns.Add(model => model.Contact2).Titled("Contact No.2").Filterable(true);
+       columns.Add(model => model.Country).Titled("Country").Filterable(true);
+       columns.Add(model => model.State).Titled("State").Filterable(true);
+       columns.Add().Titled("Image").RenderValueAs(o=> Html.Image("~/Content/Images/"+o.ImagePath,"Image Not Found"));
+       columns.Add().Titled("Edit")
+              .Sanitized(false)
+              .Encoded(false)
+              .SetWidth(30)
+              .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = o.ContactId }));
+       columns.Add().Titled("Details")
+              .Sanitized(false)
+              .Encoded(false)
+              .SetWidth(30)
+              .RenderValueAs(o => Html.ActionLink("Details", "View", new { id = o.ContactId }));
 
-                    )
-       )
-
-
-
-
+   }).WithPaging(10).Sortable(true)
+    </div>
+</div>

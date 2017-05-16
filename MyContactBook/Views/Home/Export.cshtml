@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MyContactBook.ViewModel.ContactModel>
+@{
+    ViewBag.Title = "Export";
+    var grid = new WebGrid(source: Model, canPage: true, canSort: true);
+}
+
+<h2>Export</h2>
+<div style="overflow:auto">
+    @grid.GetHtml(
+    tableStyle: "table table-responsive",
+    columns: grid.Columns(
+                    grid.Column("FirstName", header: "First Name"),
+                    grid.Column("LastName", header: "Last Name"),
+                    grid.Column("EmailAddress", header: "Email Id"),
+                    grid.Column("Contact1", header: "Contact No.1"),
+                    grid.Column("Contact2", header: "Contact No.2"),
+                    grid.Column("Country", header: "Country"),
+                    grid.Column("State", header: "State")
+
+                        )
+               )
+</div>
+<div>
+    @using (Html.BeginForm())
+    {
+        <input type="submit" value="Export" class="btn btn-primary" /> 
+        
+    } 
+</div>
