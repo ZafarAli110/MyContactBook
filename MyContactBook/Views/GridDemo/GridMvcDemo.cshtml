@@ -28,12 +28,17 @@
               .Sanitized(false)
               .Encoded(false)
               .SetWidth(30)
-              .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = o.ContactId }));
+              .RenderValueAs(o => Html.ActionLink("Edit", "Edit", "Home" , new { id = o.ContactId },null));
        columns.Add().Titled("Details")
               .Sanitized(false)
               .Encoded(false)
               .SetWidth(30)
-              .RenderValueAs(o => Html.ActionLink("Details", "View", new { id = o.ContactId }));
+              .RenderValueAs(o => Html.ActionLink("Details", "View","Home" , new { id = o.ContactId },null));
+       columns.Add().Titled("Delete")
+              .Sanitized(false)
+              .Encoded(false)
+              .SetWidth(30)
+              .RenderValueAs(o => Html.ActionLink("Delete", "Delete", "Home", new { id = o.ContactId }, null));
 
    }).WithPaging(10).Sortable(true)
     </div>

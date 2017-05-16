@@ -16,13 +16,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Contact Book", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("My Contact Book", "AllContacts", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Home", "AllContacts", "Home")</li>
                     <li>@Html.ActionLink("Add Contact", "Add", "Home")</li>
-                    <li>@Html.ActionLink("Export", "Export", "Home")</li>
+                    <li>@Html.ActionLink("Export Contacts", "Export", "Export")</li>
+                    <li>@Html.ActionLink("GridMvcDemo", "GridMvcDemo", "GridDemo")</li>
+                    <li>@Html.ActionLink("WebGridDemo", "WebGridDemo", "GridDemo")</li>
                     
                 </ul>
             </div>

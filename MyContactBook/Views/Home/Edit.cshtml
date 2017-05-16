@@ -100,54 +100,11 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "AllContacts","Home")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
-
-        $(function () {
-
-            $("#CountryId").change(function () {
-
-                var countryID = parseInt($(this).val());
-
-                if (!isNaN(countryID)) {
-
-                    var $ddState = $("#StateId"); // grabbing the dropdownList of states 
-
-                    $ddState.empty(); //clear all items
-                    $ddState.append($("<option></option>").val('').html("Please wait...")); //adding empty('') value and the header text in the dropdownList of states
-
-                    $.ajax({
-
-                        url: '@Url.Action("GetStates","Home")',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: { countryID: countryID },
-
-                        success: function (d) {
-
-                            $ddState.empty();
-                            $ddState.append($("<option></option>").val('').html("Select State"));
-
-                            $.each( d , function (index, item) {
-
-                                $ddState.append($("<option></option>").val(item.StateId).html(item.StateName));
-                            });
-                        },
-
-                        error: function () {
-                            alert("An error has been occured while gathering the data.please try again");
-                        }
-
-                        });
-                }
-
-            }); //end of change function
-
-        }); //end of dom ready function 
-
-    </script>
+    
+<script src="~/Scripts/JqueryToGetStates.js"></script>
 }
