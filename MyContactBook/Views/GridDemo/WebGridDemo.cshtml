@@ -14,7 +14,7 @@
                     grid.Column("FirstName", header: "First Name"),
                     grid.Column("LastName", header: "Last Name"),
                     grid.Column("EmailAddress", header: "Email"),
-                    grid.Column(header: "Image", format: @<text>@Html.Raw((item.ImagePath == null ? "" : "<img width='100' height='60' alt='No Image' src='/Content/Images/" + item.ImagePath + "'/>"))</text>),
+                    grid.Column(header: "Image", format: @<text>@Html.Raw((item.ImagePath == null ? "" : "<img width='100' alt='No Image' src='/Content/Images/" + item.ImagePath + "'/>"))</text>),
                     grid.Column(header: "View", format: (item) => Html.ActionLink("View", "View", "Home", new { id = item.ContactId }, null)),
                     grid.Column(header: "Edit", format: (item) => Html.ActionLink("Edit", "Edit", "Home", new { id = item.ContactId }, null)),
                     grid.Column(header: "Delete", format: (item) => Html.ActionLink("Delete", "Delete", "Home", new { id = item.ContactId }, null))

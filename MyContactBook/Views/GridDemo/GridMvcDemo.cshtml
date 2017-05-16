@@ -23,7 +23,7 @@
        columns.Add(model => model.Contact2).Titled("Contact No.2").Filterable(true);
        columns.Add(model => model.Country).Titled("Country").Filterable(true);
        columns.Add(model => model.State).Titled("State").Filterable(true);
-       columns.Add().Titled("Image").RenderValueAs(o=> Html.Image("~/Content/Images/"+o.ImagePath,"Image Not Found"));
+       //columns.Add().Titled("Image").RenderValueAs(o=> Html.Image("~/Content/Images/"+o.ImagePath,"Image Not Found"));
        columns.Add().Titled("Edit")
               .Sanitized(false)
               .Encoded(false)
